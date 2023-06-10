@@ -1,21 +1,25 @@
-import React, { useState } from "react";
+import React from "react";
+import { Link } from "react-router-dom";
 import HeaderLogin from "./HeaderLogin";
 import User from "./User";
 
 function Header() {
-  const [logged, setLogged] = useState<boolean>(false);
+  const logged: boolean = false;
 
   return (
-    <div className="w-[100%] bg-white py-4 px-5 shadow fixed z-10">
-      <div className="container mx-auto flex justify-between">
+    <nav className="w-[100%] bg-white py-4 shadow fixed z-10">
+      <div className="sm:max-w-[60%] container mx-auto flex justify-between">
         <div>
-          <button className="btn rounded bg-slate-700 text-white px-2 py-1 font-bold hover:bg-slate-950 transition-all">
+          <Link
+            className="btn rounded bg-slate-700 text-white px-2 py-2 font-bold ml-2 hover:bg-slate-950 transition-all"
+            to={"/"}
+          >
             MERN BLOG
-          </button>
+          </Link>
         </div>
         {logged ? <User></User> : <HeaderLogin></HeaderLogin>}
       </div>
-    </div>
+    </nav>
   );
 }
 
