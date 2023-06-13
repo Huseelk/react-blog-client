@@ -1,18 +1,40 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import PostDescription from "./PostDescription";
+import PostSkeleton from "./PostSkeleton";
 
-function Post() {
+function Post({ item, isFullPost }: any) {
+  const userData = useSelector((state: any) => state.auth.data);
+
+  const isEditable =
+    userData?._id && item?.user._id && userData?._id === item?.user._id;
+
   return (
-    <article className="mx-auto mb-10 xsm:max-w-[60%] max-w-xs bg-white relative top-24 flex justify-center flex-col items-center shadow">
-      <div className="font-bold text-2xl w-[100%]">
-        <img
-          className="h-[100%] w-[100%]"
-          src="https://res.cloudinary.com/practicaldev/image/fetch/s--UnAfrEG8--/c_imagga_scale,f_auto,fl_progressive,h_420,q_auto,w_1000/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/icohm5g0axh9wjmu4oc3.png"
-          alt=""
-        />
-      </div>
-      <PostDescription></PostDescription>
-    </article>
+    <>
+      {item ? (
+        <article
+          className={`border min-w-[320px] mb-10 xsm:max-w-[100%] max-w-md mx-auto bg-white flex justify-center flex-col items-start shadow ${
+            isEditable && "hover:border-blue-600"
+          }`}
+        >
+          {item?.imageUrl ? (
+            <div className="font-bold text-2xl w-[100%]">
+              <img
+                className="h-[100%] w-[100%]"
+                src={item?.imageUrl}
+                alt={item?.title}
+              />
+            </div>
+          ) : null}
+          <PostDescription
+            isFullPost={isFullPost}
+            item={item}
+          ></PostDescription>
+        </article>
+      ) : (
+        <PostSkeleton></PostSkeleton>
+      )}
+    </>
   );
 }
 

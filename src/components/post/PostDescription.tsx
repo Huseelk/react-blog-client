@@ -1,23 +1,49 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
-function PostDescription() {
+function PostDescription({ item, isFullPost }: any) {
+  const originalDate: string = item?.createdAt;
+  const dateObj: Date = new Date(originalDate);
+
+  const options: Intl.DateTimeFormatOptions = {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+  };
+  const formattedDate: string = dateObj.toLocaleDateString("en-US", options);
+
   return (
-    <div className="mx-8 p-4">
-      <h3 className="font-bold text-sm">Keff</h3>
-      <p className="text-xs text-gray-400">6 June 2023</p>
-      <h2 className="font-bold text-4xl my-3">
-        Roast the code #1 | Rock Paper Scissors
-      </h2>
+    <div className="mx-8 p-4 relative">
+      <div className="flex flex-row">
+        <img
+          className="mr-3 rounded-full w-8 h-8 absolute left-[-20px]"
+          src={
+            item?.user.avatarUrl ||
+            "https://www.w3schools.com/w3images/avatar2.png"
+          }
+          alt="User icon"
+        />
+        <div>
+          <h3 className="font-bold text-sm">{item?.user.fullName}</h3>
+          <p className="text-xs text-gray-400">{formattedDate}</p>
+        </div>
+      </div>
+
+      {!isFullPost ? (
+        <h2 className="font-bold text-4xl my-3 hover:text-blue-500">
+          <Link to={`posts/${item?._id}`}>{item?.title}</Link>
+        </h2>
+      ) : (
+        <h2 className="font-bold text-4xl my-3">{item?.title}</h2>
+      )}
       <p className="text-xs text-gray-400 [word-spacing:10px]">
-        #React #Angular #TypeScript
+        {item?.tags.map((e: string) => (
+          <span key={e} className="mr-3">
+            #{e}
+          </span>
+        ))}
       </p>
-      <p className="my-4">
-        Hey there! 👋 I'm starting a new series called "Roast the Code", where I
-        will share some code, and let YOU roast and improve it. There's not much
-        more to it, just be polite and constructive, this is an exercise so we
-        can all learn together. Now then, head over to the repo and roast as
-        hard as you can!!
-      </p>
+      <p className="my-4">{item?.text}</p>
       <div className="text-xs text-gray-400 flex flex-row">
         <div className="mr-6 flex flex-row">
           <svg
@@ -40,7 +66,7 @@ function PostDescription() {
             />
           </svg>
 
-          <span>150</span>
+          <span>{item?.viewsCount}</span>
         </div>
 
         <div className="mr-6 flex flex-row">

@@ -1,6 +1,21 @@
 import React from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { logout } from "../../redux/slices/auth";
+import { AppDispatch } from "../../redux/store";
 
 function User() {
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
+
+  const onClickLogout = () => {
+    if (window.confirm("Are youy sure you want to logout?")) {
+      dispatch(logout());
+      window.localStorage.removeItem("token");
+      navigate("/");
+    }
+  };
+
   return (
     <div className="flex">
       <div className="mx-2">
@@ -10,7 +25,10 @@ function User() {
       </div>
 
       <div className="mx-2">
-        <button className="px-2 py-1 border border-red-500 rounded bg-red-500 text-white hover:bg-red-700 transition-all">
+        <button
+          onClick={onClickLogout}
+          className="px-2 py-1 border border-red-500 rounded bg-red-500 text-white hover:bg-red-700 transition-all"
+        >
           LOG OUT
         </button>
       </div>

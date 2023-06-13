@@ -1,10 +1,15 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { selectIsAuth } from "../../redux/slices/auth";
 import HeaderLogin from "./HeaderLogin";
 import User from "./User";
 
 function Header() {
-  const logged: boolean = false;
+  const isAuth = useSelector(selectIsAuth);
+  const { auth } = useSelector((state: any) => state);
+
+  const isUserLoading = auth.status === "loading";
 
   return (
     <nav className="w-[100%] bg-white py-4 shadow fixed z-10">
@@ -17,7 +22,7 @@ function Header() {
             MERN BLOG
           </Link>
         </div>
-        {logged ? <User></User> : <HeaderLogin></HeaderLogin>}
+        {!isUserLoading && (isAuth ? <User></User> : <HeaderLogin></HeaderLogin>)}
       </div>
     </nav>
   );

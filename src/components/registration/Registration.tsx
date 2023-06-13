@@ -2,15 +2,10 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
-import { fetchAuth, selectIsAuth } from "../../redux/slices/auth";
+import { fetchRegister, selectIsAuth } from "../../redux/slices/auth";
 import { AppDispatch } from "../../redux/store";
 
-export interface authData {
-  email: string;
-  password: string;
-}
-
-function Login() {
+function Registration() {
   const isAuth = useSelector(selectIsAuth);
   const dispatch = useDispatch<AppDispatch>();
 
@@ -20,19 +15,20 @@ function Login() {
     formState: { errors },
   } = useForm({
     defaultValues: {
+      fullName: "",
       email: "",
       password: "",
     },
     mode: "all",
   });
 
-  const onSubmit = async (values: authData) => {
-    const data = await dispatch(fetchAuth(values));
+  const onSubmit = async (values: any) => {
+    const data = await dispatch(fetchRegister(values));
 
     if (data.payload) {
       window.localStorage.setItem("token", data.payload?.token);
     } else {
-      alert("Cant authorizate");
+      alert("Cant create new account!!");
     }
   };
 
@@ -56,7 +52,23 @@ function Login() {
 
   return (
     <div className="mx-auto xsm:max-w-md max-w-xs bg-white relative top-24 p-4 flex justify-center flex-col items-center">
-      <div className="mb-8 mt-6 font-bold text-2xl">Log In To Your Account</div>
+      <div className="mb-8 mt-6 font-bold text-2xl flex flex-col items-center">
+        <span>Create New Account</span>
+        <div className="mt-4 relative w-20 h-20 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-400">
+          <svg
+            className="absolute text-white top-2"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fillRule="evenodd"
+              d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+              clipRule="evenodd"
+            ></path>
+          </svg>
+        </div>
+      </div>
       <div>
         <form
           onSubmit={handleSubmit(onSubmit)}
@@ -64,9 +76,29 @@ function Login() {
         >
           <div className="flex flex-col">
             <input
+              type="text"
+              placeholder="Full Name"
+              className="border rounded border-gray-400 py-1 px-2 outline-none focus:border-blue-700 shadow"
+              {...register("fullName", {
+                required: "Set you name",
+                minLength: {
+                  value: 5,
+                  message: "Write min 5 symbols",
+                },
+              })}
+            />
+            {errors.fullName && (
+              <span className="mt-1 text-red-500 text-sm">
+                {errors.fullName?.message}
+              </span>
+            )}
+          </div>
+
+          <div className="flex flex-col">
+            <input
               type="email"
               placeholder="E-Mail"
-              className="border rounded border-gray-400 py-1 px-2 outline-none focus:border-blue-700 shadow"
+              className="border rounded border-gray-400 mt-5 py-1 px-2 outline-none focus:border-blue-700 shadow"
               {...register("email", {
                 required: "Set Email",
                 validate: {
@@ -85,7 +117,7 @@ function Login() {
             <input
               type="password"
               placeholder="Password"
-              className="border rounded border-gray-400 mt-6 py-1 px-2 outline-none focus:border-blue-700 shadow"
+              className="border rounded border-gray-400 mt-5 py-1 px-2 outline-none focus:border-blue-700 shadow"
               {...register("password", {
                 required: "Set Password",
                 minLength: {
@@ -100,12 +132,8 @@ function Login() {
               </span>
             )}
           </div>
-
-          <button
-            className="mt-5 w-[100%] p-2 rounded border bg-blue-500 hover:bg-blue-700 transition-all text-white mb-12 font-bold"
-            type="submit"
-          >
-            Sign In
+          <button className="mt-6 w-[100%] p-2 rounded border bg-blue-500 hover:bg-blue-700 transition-all text-white mb-12 font-bold">
+            Submit
           </button>
         </form>
       </div>
@@ -113,4 +141,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Registration;
