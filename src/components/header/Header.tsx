@@ -16,13 +16,13 @@ function Header() {
       <div className="sm:max-w-[60%] container mx-auto flex justify-between">
         <div>
           <Link
-            className="btn rounded bg-slate-700 text-white px-2 py-2 font-bold ml-2 hover:bg-slate-950 transition-all"
+            className="flex btn rounded bg-slate-700 text-white px-2 py-2 font-bold ml-2 hover:bg-slate-950 transition-all"
             to={"/"}
           >
             MERN BLOG
           </Link>
         </div>
-        {!isUserLoading && (isAuth ? <User></User> : <HeaderLogin></HeaderLogin>)}
+        {(isAuth ? <User></User> : <HeaderLogin></HeaderLogin>)}
       </div>
     </nav>
   );

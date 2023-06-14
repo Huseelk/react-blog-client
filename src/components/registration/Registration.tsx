@@ -1,12 +1,10 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { useDispatch, useSelector } from "react-redux";
-import { Navigate } from "react-router-dom";
-import { fetchRegister, selectIsAuth } from "../../redux/slices/auth";
+import { useDispatch } from "react-redux";
+import { fetchRegister } from "../../redux/slices/auth";
 import { AppDispatch } from "../../redux/store";
 
 function Registration() {
-  const isAuth = useSelector(selectIsAuth);
   const dispatch = useDispatch<AppDispatch>();
 
   const {
@@ -45,10 +43,6 @@ function Registration() {
 
     return isValid;
   };
-
-  if (isAuth) {
-    return <Navigate to={"/"}></Navigate>;
-  }
 
   return (
     <div className="mx-auto xsm:max-w-md max-w-xs bg-white relative top-24 p-4 flex justify-center flex-col items-center">

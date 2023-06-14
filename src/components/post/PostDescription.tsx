@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import PostText from "./PostText";
 
 function PostDescription({ item, isFullPost }: any) {
   const originalDate: string = item?.createdAt;
@@ -37,13 +38,15 @@ function PostDescription({ item, isFullPost }: any) {
         <h2 className="font-bold text-4xl my-3">{item?.title}</h2>
       )}
       <p className="text-xs text-gray-400 [word-spacing:10px]">
-        {item?.tags.map((e: string) => (
-          <span key={e} className="mr-3">
+        {item?.tags.map((e: string, idx: number) => (
+          <span key={idx} className="mr-3">
             #{e}
           </span>
         ))}
       </p>
-      <p className="my-4">{item?.text}</p>
+
+      <PostText item={item}></PostText>
+
       <div className="text-xs text-gray-400 flex flex-row">
         <div className="mr-6 flex flex-row">
           <svg

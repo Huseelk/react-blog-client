@@ -4,6 +4,7 @@ import { selectIsAuth } from "../../redux/slices/auth";
 
 function Comments() {
   const isAuth = useSelector(selectIsAuth);
+  const { auth } = useSelector((state: any) => state);
 
   return (
     <div className="p-4 min-w-[320px] mb-10 xsm:max-w-[100%] max-w-md mx-auto bg-white flex justify-center flex-col items-start shadow">
@@ -33,7 +34,10 @@ function Comments() {
         <div className="mt-4 flex flex-row w-[100%]">
           <img
             className="mr-3 rounded-full w-8 h-8"
-            src="https://www.w3schools.com/w3images/avatar2.png"
+            src={
+              auth.data.avatarUrl ||
+              "https://www.w3schools.com/w3images/avatar2.png"
+            }
             alt="User icon"
           />
           <textarea

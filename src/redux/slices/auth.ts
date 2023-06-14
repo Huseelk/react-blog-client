@@ -31,6 +31,7 @@ export const fetchAuthMe = createAsyncThunk(
 
 const initialState = {
   data: null,
+  error: null,
   status: "loading",
 };
 
@@ -51,7 +52,7 @@ const authSlice = createSlice({
       state.data = action.payload;
       state.status = "loaded";
     });
-    builder.addCase(fetchAuth.rejected, (state: any) => {
+    builder.addCase(fetchAuth.rejected, (state: any, action) => {
       state.status = "error";
       state.data = null;
     });
@@ -64,7 +65,7 @@ const authSlice = createSlice({
       state.data = action.payload;
       state.status = "loaded";
     });
-    builder.addCase(fetchAuthMe.rejected, (state: any) => {
+    builder.addCase(fetchAuthMe.rejected, (state: any, action) => {
       state.status = "error";
       state.data = null;
     });
@@ -77,14 +78,15 @@ const authSlice = createSlice({
       state.data = action.payload;
       state.status = "loaded";
     });
-    builder.addCase(fetchRegister.rejected, (state: any) => {
+    builder.addCase(fetchRegister.rejected, (state: any, action) => {
       state.status = "error";
       state.data = null;
     });
   },
 });
 
-export const selectIsAuth = (state: any): boolean => Boolean(state.auth.data);
+export const selectIsAuth = (state: any): boolean =>
+  Boolean(state.auth.data || window.localStorage.getItem("token"));
 
 export const authReducer = authSlice.reducer;
 

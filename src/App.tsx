@@ -6,8 +6,8 @@ import "./App.scss";
 import Footer from "./components/footer/Footer";
 import Header from "./components/header/Header";
 import Login from "./components/login/Login";
-import Post from "./components/post/Post";
 import Registration from "./components/registration/Registration";
+import AddPost from "./pages/AddPost";
 import FullPost from "./pages/FullPost";
 import Home from "./pages/Home";
 
@@ -19,7 +19,9 @@ function App() {
   const isAuth = useSelector(selectIsAuth);
 
   useEffect(() => {
-    dispatch(fetchAuthMe());
+    if (isAuth) {
+      dispatch(fetchAuthMe());
+    }
   }, []);
 
   return (
@@ -28,9 +30,9 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/posts/:id" element={<FullPost />} />
-        <Route path="/add-post" element={<Post />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Registration />} />
+        {isAuth && <Route path="/add-post" element={<AddPost />} />}
+        {!isAuth && <Route path="/login" element={<Login />} />}
+        {!isAuth && <Route path="/register" element={<Registration />} />}
         <Route path="*" element={<Navigate to={"/"} />} />
       </Routes>
       <Footer></Footer>
