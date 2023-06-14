@@ -7,16 +7,13 @@ import User from "./User";
 
 function Header() {
   const isAuth = useSelector(selectIsAuth);
-  const { auth } = useSelector((state: any) => state);
-
-  const isUserLoading = auth.status === "loading";
 
   return (
     <nav className="w-[100%] bg-white py-4 shadow fixed z-10">
-      <div className="sm:max-w-[60%] container mx-auto flex justify-between">
+      <div className="sm:max-w-[60%] container mx-auto flex justify-between items-center">
         <div>
           <Link
-            className="flex btn rounded bg-slate-700 text-white px-2 py-2 font-bold ml-2 hover:bg-slate-950 transition-all"
+            className="flex btn rounded bg-slate-700 text-white px-2 py-1.5 font-bold ml-2 hover:bg-slate-950 transition-all"
             to={"/"}
           >
             MERN BLOG

@@ -10,6 +10,7 @@ import Registration from "./components/registration/Registration";
 import AddPost from "./pages/AddPost";
 import FullPost from "./pages/FullPost";
 import Home from "./pages/Home";
+import TagPosts from "./pages/TagPosts";
 
 import { fetchAuthMe, selectIsAuth } from "./redux/slices/auth";
 import { AppDispatch } from "./redux/store";
@@ -30,7 +31,9 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/posts/:id" element={<FullPost />} />
+        <Route path="/category/:tag" element={<TagPosts />} />
         {isAuth && <Route path="/add-post" element={<AddPost />} />}
+        {isAuth && <Route path="/posts/:id/edit" element={<AddPost />} />}
         {!isAuth && <Route path="/login" element={<Login />} />}
         {!isAuth && <Route path="/register" element={<Registration />} />}
         <Route path="*" element={<Navigate to={"/"} />} />

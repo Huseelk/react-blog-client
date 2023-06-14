@@ -13,7 +13,7 @@ function User() {
     if (window.confirm("Are youy sure you want to logout?")) {
       dispatch(logout());
       window.localStorage.removeItem("token");
-      navigate("/");
+      navigate("/login");
     }
   };
 

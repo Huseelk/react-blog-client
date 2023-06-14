@@ -1,7 +1,7 @@
 import axios from "../axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 
 interface FormData {
@@ -12,6 +12,9 @@ interface FormData {
 }
 
 function AddPost() {
+  const { id } = useParams();
+  const isEditing = Boolean(id);
+
   const [fileName, setFileName] = useState("Choose File");
   const [tags, setTags] = useState("");
   const [imageUrl, setImageUrl] = useState<string>("");
@@ -27,7 +30,7 @@ function AddPost() {
       formData.append("image", file);
       const { data } = await axios.post("/uploads", formData);
 
-      setImageUrl(data.url);
+      setImageUrl(data.url.substring(1));
     } catch (error) {
       console.warn(error);
       alert("Image loading error");
@@ -42,6 +45,7 @@ function AddPost() {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<FormData>({
     mode: "all",
@@ -50,23 +54,50 @@ function AddPost() {
   const onSubmit = async (values: FormData) => {
     try {
       if (imageUrl) {
-        values.imageUrl = `http://localhost:4444${imageUrl}` as any;
+        values.imageUrl = `http://localhost:4444/${imageUrl}` as any;
       }
 
       if (tags && tags.trim().split(" ").length > 0) {
-        values.tags = tags;
+        values.tags = tags.trim();
+        console.log(tags);
+        
       }
 
-      const { data } = await axios.post("/posts", values);
+      const { data } = isEditing
+        ? await axios.patch(`/posts/${id}`, values)
+        : await axios.post("/posts", values);
 
-      const id = data._id;
+      const postId = isEditing ? id : data._id;
 
-      navigate(`/posts/${id}`);
+      navigate(`/posts/${postId}`);
     } catch (error) {
       console.warn(error);
       alert("Post creating error");
     }
   };
+
+  useEffect(() => {
+    if (id) {
+      axios
+        .get(`posts/${id}`)
+        .then(({ data }: any) => {
+          setValue("title", data.title);
+          setValue("text", data.text);
+          setTags(data?.tags.join(" "));
+          setImageUrl(`uploads/${data?.imageUrl.split("/").slice(-1)[0]}`);
+          setFileName(data?.imageUrl.split("/").slice(-1)[0]);
+        })
+        .catch((e) => {
+          if (
+            e.message ===
+            "Cannot read properties of undefined (reading 'split')"
+          ) {
+            return;
+          }
+          console.warn(e);
+        });
+    }
+  }, []);
 
   return (
     <div className="container mb-4 sm:max-w-[60%] w-90% mx-auto top-24 relative">
@@ -87,7 +118,7 @@ function AddPost() {
                 </button>
                 <img
                   className="max-w-[150px]"
-                  src={`http://localhost:4444${imageUrl}`}
+                  src={`http://localhost:4444/${imageUrl}`}
                   alt="Uploaded"
                 />
               </div>
@@ -127,6 +158,7 @@ function AddPost() {
               className="w-[100%] border rounded border-transparent p-2 outline-none focus:border-gray-300 transition-all"
               type="text"
               placeholder="Tags"
+              value={tags}
               onChange={(e) => setTags(e.target.value)}
             />
           </div>
@@ -152,10 +184,10 @@ function AddPost() {
           </div>
           <div>
             <button className="px-4 py-2 mr-3 border-2 rounded bg-blue-500 text-white hover:bg-blue-700 transition-all">
-              Publish
+              {isEditing ? "Save" : "Publish"}
             </button>
             <Link
-              to="/"
+              to={isEditing ? `/posts/${id}` : "/"}
               type="submit"
               className="text-red-400 underline hover:text-red-700 transition-all"
             >
