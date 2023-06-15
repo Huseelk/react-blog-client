@@ -54,13 +54,12 @@ function AddPost() {
   const onSubmit = async (values: FormData) => {
     try {
       if (imageUrl) {
-        values.imageUrl = `http://localhost:4444/${imageUrl}` as any;
+        values.imageUrl = `${process.env.REACT_APP_API_URL}${imageUrl}` as any;
       }
 
       if (tags && tags.trim().split(" ").length > 0) {
         values.tags = tags.trim();
         console.log(tags);
-        
       }
 
       const { data } = isEditing
@@ -118,7 +117,7 @@ function AddPost() {
                 </button>
                 <img
                   className="max-w-[150px]"
-                  src={`http://localhost:4444/${imageUrl}`}
+                  src={`${process.env.REACT_APP_API_URL}${imageUrl}`}
                   alt="Uploaded"
                 />
               </div>

@@ -1,7 +1,7 @@
 import axios, { InternalAxiosRequestConfig } from "axios";
 
 const instance = axios.create({
-  baseURL: "https://node-react-blog.onrender.com/",
+  baseURL: process.env.REACT_APP_API_URL,
 });
 
 instance.interceptors.request.use(
