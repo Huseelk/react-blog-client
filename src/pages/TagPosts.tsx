@@ -15,7 +15,7 @@ function TagPosts() {
   }, []);
 
   return (
-    <div className="container mb-4 sm:max-w-[60%] w-90% mx-auto top-24 relative">
+    <div className="flex flex-col justify-center align-center container mb-4 sm:max-w-[60%] w-90% mx-auto top-24 relative">
       <div className="mb-1">
         <div className="font-bold text-gray-600 flex flex-row items-center">
           <Link className="text-gray-400 mr-1 hover:text-gray-600" to={"/"}>Home</Link>
@@ -24,7 +24,7 @@ function TagPosts() {
         </div>
       </div>
 
-      <div className="xl:w-2/3 w-[100%] pb-3">
+      <div className="xsm:w-[100%] pb-3">
         {posts &&
           posts.map((item: any, idx: number) => {
             return (
