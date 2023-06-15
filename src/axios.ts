@@ -1,7 +1,7 @@
 import axios, { InternalAxiosRequestConfig } from "axios";
 
 const instance = axios.create({
-  baseURL: "http://localhost:4444",
+  baseURL: "https://node-react-blog.onrender.com/",
 });
 
 instance.interceptors.request.use(
